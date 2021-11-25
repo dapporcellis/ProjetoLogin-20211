@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adiciona Usuário</title>
+    <style>
+        table, tr, td, th{
+            border: 1px solid black;
+        }
+        tr, td, th{
+            padding: 10px;
+            text-align: center;
+        }
+        ul{
+            margin-bottom: 15px;
+        }
+        input{
+            margin-bottom: 15px;
+            padding: 10px;
+        }
+        img{
+            max-height: 200px;
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Seja bem-vindo <%=logado.nome%> <img src="/uploads/<%=logado.foto%>"></h1>
+    <ul>
+        <li>
+            <a href="/admin/usuario/">Listar</a>
+        </li>
+        <li>
+            <a href="/admin/usuario/add">Adicionar</a>
+        </li>
+        <li>
+            <a href="/admin/sair">Sair</a>
+        </li>
+    </ul>
+    <form method="post" enctype="multipart/form-data">
+        Nome: <input type="text" name="nome" placeholder="Digite seu nome"><br>
+        Email: <input type="email" name="email" placeholder="Digite seu email"><br>
+        Senha: <input type="password" name="senha" placeholder="Digite sua senha"><br>
+        Foto: <input type="file" name="foto"><br>
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>
