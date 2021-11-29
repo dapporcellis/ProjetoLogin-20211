@@ -5,11 +5,19 @@ const { unlink } = require("fs/promises");
 const path = require("path");
 
 async function abreadd(req, res) {
-  res.render("usuario/add.ejs", { logado: req.user });
+  if (req.user.permissao == "super" || req.user.permissao == "admin") {
+    res.render("usuario/add.ejs", { logado: req.user });
+  } else {
+    req.flash(
+      "msg",
+      "O usuário não tem permissão para Adicionar novos usuários!"
+    );
+    res.redirect("/admin/usuario");
+  }
 }
 
 async function add(req, res) {
-  let { nome, email, senha } = req.body;
+  let { nome, email, senha, permissao } = req.body;
 
   const salt = bcrypt.genSaltSync(10);
   senha = bcrypt.hashSync(senha, salt);
@@ -18,13 +26,15 @@ async function add(req, res) {
     var foto = req.file.filename;
   }
 
-  await Usuario.create({ nome, email, senha, foto }).then((usuario) => {
-    req.flash(
-      "msg",
-      "O usuário " + usuario.nome + " foi adicionado com sucesso!"
-    );
-    res.redirect("/admin/usuario");
-  });
+  await Usuario.create({ nome, email, senha, foto, permissao }).then(
+    (usuario) => {
+      req.flash(
+        "msg",
+        "O usuário " + usuario.nome + " foi adicionado com sucesso!"
+      );
+      res.redirect("/admin/usuario");
+    }
+  );
 }
 
 async function list(req, res) {
@@ -68,6 +78,7 @@ async function edit(req, res) {
 
   usuario.nome = req.body.nome;
   usuario.email = req.body.email;
+  usuario.permissao = req.body.permissao;
 
   if (req.file != undefined) {
     let diretorio = path.join(__dirname);
@@ -88,21 +99,26 @@ async function edit(req, res) {
 }
 
 async function del(req, res) {
-  const deletar = req.params.id;
-  if (deletar == req.user.id) {
-    req.flash("msg", "O usuário logado não pode ser deletado!");
+  if (req.user.permissao != "super") {
+    req.flash("msg", "O usuário não tem permissão para deletar usuários!");
     res.redirect("/admin/usuario");
   } else {
-    const usuario = await Usuario.findByPk(deletar);
-    let diretorio = path.join(__dirname);
-    diretorio = path.normalize(
-      diretorio + "/../public/uploads/" + usuario.foto
-    );
-    await unlink(diretorio);
-    usuario.destroy().then(() => {
-      req.flash("msg", "O usuário foi deletado com sucesso!");
+    const deletar = req.params.id;
+    if (deletar == req.user.id) {
+      req.flash("msg", "O usuário logado não pode ser deletado!");
       res.redirect("/admin/usuario");
-    });
+    } else {
+      const usuario = await Usuario.findByPk(deletar);
+      let diretorio = path.join(__dirname);
+      diretorio = path.normalize(
+        diretorio + "/../public/uploads/" + usuario.foto
+      );
+      await unlink(diretorio);
+      usuario.destroy().then(() => {
+        req.flash("msg", "O usuário foi deletado com sucesso!");
+        res.redirect("/admin/usuario");
+      });
+    }
   }
 }
 

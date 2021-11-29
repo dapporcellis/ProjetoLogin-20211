@@ -53,6 +53,7 @@
             <th>nome</th>
             <th>email</th>
             <th>foto</th>
+            <th>Permissão</th>
             <th>edita</th>
             <th>deleta</th>
         </tr>
@@ -64,6 +65,7 @@
             <td>
                 <img src="/uploads/<%=usuario.foto%>">                
             </td>
+            <td><%=usuario.permissao%></td>
             <td>
                 <a href="/admin/usuario/edt/<%=usuario.id%>">
                     <img src="/edit.png" class="icon">

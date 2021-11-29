@@ -8,6 +8,7 @@ class Usuario extends Model {
         email: DataTypes.STRING,
         senha: DataTypes.STRING,
         foto: DataTypes.STRING,
+        permissao: DataTypes.STRING,
       },
       { sequelize, freezeTableName: true }
     );

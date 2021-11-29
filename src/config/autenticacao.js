@@ -3,6 +3,8 @@ exports.autenticacao = function autenticacao() {
     if (req.isAuthenticated()) {
       return next();
     }
+    //console.log(req);
+    req.flash("site", req._parsedUrl.path);
     req.flash("msg", "Você deve se logar para acessar esse link!");
     res.redirect("/admin");
   };

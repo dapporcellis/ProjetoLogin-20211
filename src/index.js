@@ -28,6 +28,7 @@ app.set("views", "./src/views");
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/admin/usuario", autenticacao.autenticacao(), usuarioRoute);
+//app.use("/admin/usuario", usuarioRoute);
 app.use("/admin", loginRoute);
 
 app.listen(3000, function (req, res) {

@@ -1,11 +1,11 @@
 const passport = require("../config/passport");
 
 async function abrelogin(req, res) {
-  res.render("index.ejs", { msg: req.flash("msg") });
+  res.render("index.ejs", { msg: req.flash("msg"), site: req.flash("site") });
 }
 
 const logar = passport.authenticate("local", {
-  successRedirect: "/admin/usuario",
+  //successRedirect: "/admin/usuario",
   failureRedirect: "/admin",
   failureFlash: true,
 });
